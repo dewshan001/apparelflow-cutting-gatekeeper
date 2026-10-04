@@ -3,18 +3,19 @@ import { z } from "zod";
 import { db } from "@/db";
 import { cuttingOrders, recipes, verificationItems } from "@/db/schema";
 import { expectedComponents, expectedFabric } from "./domain/orders";
+import { MAX_DB_INT, MAX_QTY, MAX_ROLL_ID_LENGTH, MAX_YARDS } from "@/lib/limits";
 import { fieldErrors, positiveInt, positiveYards } from "./domain/schemas";
 import { HttpError } from "./http";
 
 export const createOrderSchema = z.object({
-  recipeId: positiveInt,
-  targetQty: positiveInt,
+  recipeId: positiveInt.max(MAX_DB_INT, { error: "Invalid recipe" }),
+  targetQty: positiveInt.max(MAX_QTY, { error: `Must be ${MAX_QTY.toLocaleString("en-US")} or fewer` }),
   fabricRollId: z
     .string({ error: "Fabric roll ID is required" })
     .trim()
     .min(1, { error: "Fabric roll ID is required" })
-    .max(50, { error: "Fabric roll ID must be 50 characters or fewer" }),
-  actualFabricYds: positiveYards,
+    .max(MAX_ROLL_ID_LENGTH, { error: `Must be ${MAX_ROLL_ID_LENGTH} characters or fewer` }),
+  actualFabricYds: positiveYards.max(MAX_YARDS, { error: `Must be ${MAX_YARDS.toLocaleString("en-US")} or fewer` }),
 });
 
 /** Parses a JSON body with a zod schema; throws 422 with field errors. Unknown keys are dropped. */
