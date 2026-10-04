@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791129993511,
+      "tag": "0000_slim_morgan_stark",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791129994994,
+      "tag": "0001_verification_logs_append_only",
+      "breakpoints": true
+    }
+  ]
+}
