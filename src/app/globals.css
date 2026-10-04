@@ -18,3 +18,40 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
 }
+
+/* High-contrast form controls: never white-on-white, in any state. */
+input,
+select,
+textarea,
+option {
+  color: #111827;
+  background-color: #ffffff;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 1px;
+  color: #111827;
+  background-color: #ffffff;
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  color: #374151;
+  background-color: #e5e7eb;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+}

@@ -1,8 +1,10 @@
-export default function Home() {
-  return (
-    <main className="p-8">
-      <h1 className="text-2xl font-semibold">ApparelFlow Cutting Gatekeeper</h1>
-      <p className="mt-2 text-gray-700">Project scaffold is running.</p>
-    </main>
-  );
+import { redirect } from "next/navigation";
+import { homeFor } from "@/lib/roleConfig";
+import { getSession } from "@/server/auth";
+
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const session = await getSession();
+  redirect(session ? homeFor(session.role) : "/login");
 }
