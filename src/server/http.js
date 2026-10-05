@@ -22,3 +22,11 @@ export function route(handler) {
     }
   };
 }
+
+/** Route param -> positive integer id, or a 404 (digits only; no signs, decimals or padding tricks). */
+export function parseId(raw) {
+  if (typeof raw !== "string" || !/^[1-9]\d{0,9}$/.test(raw)) throw new HttpError(404, "Order not found");
+  const id = Number(raw);
+  if (id > 2147483647) throw new HttpError(404, "Order not found");
+  return id;
+}

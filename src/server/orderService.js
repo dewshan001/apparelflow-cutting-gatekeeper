@@ -49,7 +49,7 @@ export async function listRecipes() {
   }));
 }
 
-function toOrderDto(o) {
+export function toOrderDto(o) {
   return {
     id: o.id,
     orderNo: o.orderNo,
@@ -76,7 +76,7 @@ function toOrderDto(o) {
   };
 }
 
-const orderWith = {
+export const orderWith = {
   recipe: true,
   items: { with: { component: true } },
   logs: {

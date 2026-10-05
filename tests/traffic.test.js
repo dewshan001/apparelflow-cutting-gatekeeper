@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { canApprove, evaluate } from "@/server/domain/traffic";
+import { approvalBlockers, canApprove, evaluate } from "@/server/domain/traffic";
 
 const item = (componentId, expectedQty, actualQty, extra = {}) => ({
   componentId,
@@ -82,5 +82,48 @@ describe("canApprove", () => {
     expect(canApprove([item(1, 50, -3)])).toBe(false);
     expect(canApprove([item(1, 50, 2.5)])).toBe(false);
     expect(canApprove([item(1, 50, "50")])).toBe(false);
+  });
+});
+
+describe("approvalBlockers", () => {
+  it("is empty when everything is counted and none is short", () => {
+    expect(approvalBlockers([item(1, 50, 50), item(2, 100, 120)], [1, 2])).toEqual([]);
+  });
+
+  it("reports each problem with a reason", () => {
+    const blockers = approvalBlockers(
+      [item(1, 50, 50), item(2, 100, 99), item(3, 10, null), item(4, 10, 2.5)],
+      [1, 2, 3, 4, 5],
+    );
+    expect(blockers).toEqual([
+      { componentId: 2, reason: "SHORTAGE" },
+      { componentId: 3, reason: "UNCOUNTED" },
+      { componentId: 4, reason: "INVALID" },
+      { componentId: 5, reason: "MISSING" },
+    ]);
+  });
+
+  it("treats a count of 0 as a shortage, not as uncounted", () => {
+    expect(approvalBlockers([item(1, 10, 0)])).toEqual([{ componentId: 1, reason: "SHORTAGE" }]);
+  });
+
+  it("reports every required component as missing when there are no items", () => {
+    expect(approvalBlockers([], [1, 2])).toEqual([
+      { componentId: 1, reason: "MISSING" },
+      { componentId: 2, reason: "MISSING" },
+    ]);
+    expect(approvalBlockers(null, [1])).toEqual([{ componentId: 1, reason: "MISSING" }]);
+  });
+
+  it("agrees with canApprove", () => {
+    const cases = [
+      [item(1, 5, 5)],
+      [item(1, 5, 4)],
+      [item(1, 5, null)],
+      [],
+    ];
+    for (const items of cases) {
+      expect(canApprove(items, [1])).toBe(approvalBlockers(items, [1]).length === 0 && items.length > 0);
+    }
   });
 });
