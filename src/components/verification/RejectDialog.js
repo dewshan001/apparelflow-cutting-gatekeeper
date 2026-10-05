@@ -112,14 +112,14 @@ export default function RejectDialog({ orderNo, onCancel, onSubmit }) {
             type="button"
             onClick={onCancel}
             disabled={busy}
-            className="rounded-md border border-gray-500 bg-white px-4 py-2 font-medium text-gray-900 hover:bg-gray-100 disabled:opacity-60"
+            className="rounded-md border border-gray-500 bg-white px-4 py-2 font-medium text-gray-900 hover:bg-gray-100"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={busy}
-            className="rounded-md bg-red-700 px-4 py-2 font-semibold text-white hover:bg-red-800 disabled:opacity-60"
+            className="rounded-md bg-red-700 px-4 py-2 font-semibold text-white hover:bg-red-800"
           >
             {busy ? "Rejecting..." : "Reject batch"}
           </button>

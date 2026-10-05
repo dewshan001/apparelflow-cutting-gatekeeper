@@ -26,7 +26,7 @@ export default async function SewingDetailPage({ params }) {
 
   return (
     <div className="space-y-5">
-      <Link href="/sewing" className="inline-block text-sm font-medium text-blue-800 underline-offset-4 hover:underline">
+      <Link href="/sewing" className="inline-block py-1 text-sm font-medium text-blue-800 underline-offset-4 hover:underline">
         &larr; Back to Sewing Queue
       </Link>
 

@@ -50,6 +50,20 @@ textarea:disabled {
   background-color: #e5e7eb;
 }
 
+/* Disabled and busy buttons stay legible: no faded text (opacity would drop the contrast). */
+button:disabled {
+  background-color: #e5e7eb;
+  color: #374151;
+  border: 1px solid #6b7280;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+input:disabled::placeholder,
+textarea:disabled::placeholder {
+  color: #4b5563;
+}
+
 button:focus-visible,
 a:focus-visible {
   outline: 3px solid #1d4ed8;

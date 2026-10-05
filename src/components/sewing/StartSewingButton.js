@@ -37,7 +37,7 @@ export default function StartSewingButton({ orderId, orderNo }) {
         type="button"
         onClick={start}
         disabled={busy}
-        className="rounded-md bg-orange-700 px-5 py-2.5 font-semibold text-white hover:bg-orange-800 disabled:cursor-not-allowed disabled:opacity-60"
+        className="rounded-md bg-orange-700 px-5 py-2.5 font-semibold text-white hover:bg-orange-800"
       >
         {busy ? "Starting..." : "Start Sewing Assembly"}
       </button>

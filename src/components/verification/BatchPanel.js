@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import TrafficBadge from "@/components/TrafficBadge";
 import {
   approveBlockedReason,
@@ -43,6 +43,15 @@ export default function BatchPanel({ order, onResult }) {
   const [error, setError] = useState(null); // { title, lines }
   const [notice, setNotice] = useState("");
   const [rejecting, setRejecting] = useState(false);
+  const rejectButtonRef = useRef(null);
+  const wasRejecting = useRef(false);
+
+  // Keyboard users must not lose their place: when the dialog closes, focus goes back to the
+  // button that opened it (a native Esc already does this; Cancel unmounts the dialog instead).
+  useEffect(() => {
+    if (wasRejecting.current && !rejecting) rejectButtonRef.current?.focus();
+    wasRejecting.current = rejecting;
+  }, [rejecting]);
 
   const summary = useMemo(() => summarizeCounts(order.items, inputs), [order.items, inputs]);
   const changes = useMemo(() => changedCounts(order.items, saved, inputs), [order.items, saved, inputs]);
@@ -240,7 +249,7 @@ export default function BatchPanel({ order, onResult }) {
           <button
             type="submit"
             disabled={!dirty || summary.errorCount > 0 || busy !== null}
-            className="rounded-md border border-gray-600 bg-white px-4 py-2 font-medium text-gray-900 hover:bg-gray-100 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-700"
+            className="rounded-md border border-gray-600 bg-white px-4 py-2 font-medium text-gray-900 hover:bg-gray-100"
           >
             {busy === "save" ? "Saving..." : "Save counts"}
           </button>
@@ -249,15 +258,16 @@ export default function BatchPanel({ order, onResult }) {
             onClick={onApprove}
             disabled={approveDisabled}
             aria-describedby={`${idBase}-approve-hint`}
-            className="rounded-md bg-green-700 px-4 py-2 font-semibold text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-800"
+            className="rounded-md bg-green-700 px-4 py-2 font-semibold text-white hover:bg-green-800"
           >
             {busy === "approve" ? "Approving..." : "Approve Batch"}
           </button>
           <button
+            ref={rejectButtonRef}
             type="button"
             onClick={openReject}
             disabled={busy !== null}
-            className="rounded-md bg-red-700 px-4 py-2 font-semibold text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-md bg-red-700 px-4 py-2 font-semibold text-white hover:bg-red-800"
           >
             Reject Batch
           </button>

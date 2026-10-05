@@ -63,7 +63,7 @@ export default function DemoPanel() {
                 type="button"
                 onClick={() => loginAs(a)}
                 disabled={busyRole !== null}
-                className="mt-3 rounded-md bg-gray-900 px-3 py-1.5 text-sm font-semibold text-white hover:bg-black disabled:opacity-60"
+                className="mt-3 rounded-md bg-gray-900 px-3 py-1.5 text-sm font-semibold text-white hover:bg-black"
               >
                 {busyRole === a.role ? "Signing in..." : `Login as ${cfg.label}`}
               </button>

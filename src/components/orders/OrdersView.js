@@ -1,11 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CreateOrderModal from "./CreateOrderModal";
 import OrderCard from "./OrderCard";
 
 export default function OrdersView({ recipes, orders }) {
   const [creating, setCreating] = useState(false);
+  const createButtonRef = useRef(null);
+  const wasCreating = useRef(false);
+
+  // Return focus to the Create Order button when the dialog closes (Cancel / Close / Esc / success).
+  useEffect(() => {
+    if (wasCreating.current && !creating) createButtonRef.current?.focus();
+    wasCreating.current = creating;
+  }, [creating]);
 
   return (
     <div className="space-y-5">
@@ -15,6 +23,7 @@ export default function OrdersView({ recipes, orders }) {
           <p className="text-sm text-gray-700">Create batches and track them through verification.</p>
         </div>
         <button
+          ref={createButtonRef}
           type="button"
           onClick={() => setCreating(true)}
           className="rounded-md bg-blue-700 px-4 py-2 font-semibold text-white hover:bg-blue-800"

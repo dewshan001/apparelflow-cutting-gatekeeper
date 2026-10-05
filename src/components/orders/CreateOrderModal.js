@@ -309,7 +309,7 @@ export default function CreateOrderModal({ recipes, onClose }) {
           <button
             type="submit"
             disabled={busy}
-            className="rounded-md bg-blue-700 px-4 py-2 font-semibold text-white hover:bg-blue-800 disabled:opacity-60"
+            className="rounded-md bg-blue-700 px-4 py-2 font-semibold text-white hover:bg-blue-800"
           >
             {busy ? "Creating..." : "Create order"}
           </button>

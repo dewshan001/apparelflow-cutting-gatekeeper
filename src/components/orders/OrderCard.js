@@ -84,7 +84,7 @@ export default function OrderCard({ order }) {
             type="button"
             onClick={resubmit}
             disabled={busy}
-            className="mt-3 rounded-md bg-gray-900 px-3 py-1.5 text-sm font-semibold text-white hover:bg-black disabled:opacity-60"
+            className="mt-3 rounded-md bg-gray-900 px-3 py-1.5 text-sm font-semibold text-white hover:bg-black"
           >
             {busy ? "Resubmitting..." : "Resubmit for verification"}
           </button>
