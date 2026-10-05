@@ -7,6 +7,9 @@ import { MAX_DB_INT, MAX_QTY, MAX_ROLL_ID_LENGTH, MAX_YARDS } from "@/lib/limits
 import { fieldErrors, positiveInt, positiveYards } from "./domain/schemas";
 import { HttpError } from "./http";
 
+// postgres-js returns an array of rows; pglite (used by the tests) returns { rows }.
+const rowsOf = (result) => (Array.isArray(result) ? result : result.rows);
+
 export const createOrderSchema = z.object({
   recipeId: positiveInt.max(MAX_DB_INT, { error: "Invalid recipe" }),
   targetQty: positiveInt.max(MAX_QTY, { error: `Must be ${MAX_QTY.toLocaleString("en-US")} or fewer` }),
@@ -107,10 +110,10 @@ export async function createOrder(userId, input) {
     const expectedYds = expectedFabric(input.targetQty, recipe.stdFabricYards);
 
     // Reserve the id first so the human-readable order number is unique without retries.
-    const [{ id }] = await tx.execute(
+    const reserved = await tx.execute(
       sql`select nextval(pg_get_serial_sequence('cutting_orders', 'id')) as id`,
     );
-    const newId = Number(id);
+    const newId = Number(rowsOf(reserved)[0].id);
 
     await tx.insert(cuttingOrders).values({
       id: newId,

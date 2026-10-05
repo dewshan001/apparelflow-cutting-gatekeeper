@@ -8,5 +8,9 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["tests/**/*.test.js"],
+    setupFiles: ["./tests/setup.js"],
+    // The first PGlite boot (migrations + seed) takes a couple of seconds.
+    testTimeout: 30000,
+    hookTimeout: 60000,
   },
 });
